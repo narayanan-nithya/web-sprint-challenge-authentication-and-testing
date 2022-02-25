@@ -7,8 +7,17 @@ const validateUsername = require('../middleware/validateUsername')
 const validateUserCredentials = require('../middleware/validateUserCredentials')
 
 
-router.post('/register', (req, res) => {
-  res.end('implement register, please!');
+router.post('/register', validateUserCredentials, validateUserExists,async (req, res, next) => {
+  try{
+    let{username, password} = req.body
+    const hash = bcrypt.hashSync(password,8)
+
+    const newUser = await User.add({username, password: hash})
+    res.status(201).json(newUser)
+  }
+  catch(err){
+    next(err)
+  }
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -36,8 +45,19 @@ router.post('/register', (req, res) => {
   */
 });
 
-router.post('/login', (req, res) => {
-  res.end('implement login, please!');
+router.post('/login', validateUserCredentials, validateUsername, (req, res, next) => {
+  let {username, password} = req.body
+  try{
+    if(bcrypt.compareSync(password, req.user.password)){
+      const token = accessToken(req.user)
+      res.json({message: `welcome, ${username}`, token})
+    }
+    else{
+      next({status:400, message:"invalid credentials"})
+    }
+  }catch(err){
+    next(err)
+  }
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
