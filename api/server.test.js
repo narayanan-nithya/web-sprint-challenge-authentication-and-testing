@@ -8,11 +8,11 @@ test('sanity', () => {
   expect(true).not.toBe(false)
 })
 beforeAll(async() =>{
-  await.db.migrate.rollback()
-  await.db.migrate.latest()
+  await db.migrate.rollback()
+  await db.migrate.latest()
 })
 afterAll(async()=>{
-  await.db.destroy()
+  await db.destroy()
 })
 
 describe('POST /api/auth/register', () => {
