@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const {JWT_SECRET} = require('../../secrets/index')
+const {JWT_SECRET} = require('../secrets')
 const restricted = (req, res, next) => {
 
   const token = req.headers.authorization

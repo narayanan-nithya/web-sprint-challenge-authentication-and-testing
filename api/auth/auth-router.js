@@ -1,7 +1,10 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs')
 const User = require('../auth/auth-model')
-const { accessToken } = require('../../secrets/index')
+const { accessToken } = require('../secrets')
+const validateUserExists = require('../middleware/validateUserExists')
+const validateUsername = require('../middleware/validateUsername')
+const validateUserCredentials = require('../middleware/validateUserCredentials')
 
 
 router.post('/register', (req, res) => {
